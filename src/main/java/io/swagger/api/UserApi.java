@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,60 +39,60 @@ import java.util.Map;
 @Validated
 public interface UserApi {
 
-    @Operation(summary = "Delete a user", description = "Delete a user identified by userId", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "204", description = "User deleted"),
-        
-        @ApiResponse(responseCode = "404", description = "NOT FOUND: resource not available") })
+    @Operation(summary = "Delete a user", description = "Delete a user identified by userId", tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted"),
+
+            @ApiResponse(responseCode = "404", description = "NOT FOUND: resource not available")})
     @RequestMapping(value = "/user/{userId}",
-        method = RequestMethod.DELETE)
-    ResponseEntity<Void> usersDelete(@Pattern(regexp="^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required=true, schema=@Schema()) @PathVariable("userId") Integer userId);
+            method = RequestMethod.DELETE)
+    ResponseEntity<Void> usersDelete(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required = true, schema = @Schema()) @PathVariable("userId") Integer userId);
 
 
-    @Operation(summary = "Get all the users", description = "", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Users array", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InlineResponse200.class))),
-        
-        @ApiResponse(responseCode = "404", description = "NOT FOUND: resource not available") })
+    @Operation(summary = "Get all the users", description = "", tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Users array", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InlineResponse200.class))),
+
+            @ApiResponse(responseCode = "404", description = "NOT FOUND: resource not available")})
     @RequestMapping(value = "/user",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<InlineResponse200> usersGet();
+            produces = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<ArrayList<User>> usersGet();
 
 
-    @Operation(summary = "Find user by ID", description = "Get user especified in userId", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "User", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
-        
-        @ApiResponse(responseCode = "404", description = "NOT FOUND: resource not available") })
+    @Operation(summary = "Find user by ID", description = "Get user especified in userId", tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+
+            @ApiResponse(responseCode = "404", description = "NOT FOUND: resource not available")})
     @RequestMapping(value = "/user/{userId}",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<User> usersGetId(@Pattern(regexp="^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required=true, schema=@Schema()) @PathVariable("userId") Integer userId);
+            produces = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<User> usersGetId(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required = true, schema = @Schema()) @PathVariable("userId") Integer userId);
 
 
-    @Operation(summary = "Crete a new user", description = "", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "User created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
-        
-        @ApiResponse(responseCode = "422", description = "UNPROCESSABLE ENTITY: missing data") })
+    @Operation(summary = "Crete a new user", description = "", tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+
+            @ApiResponse(responseCode = "422", description = "UNPROCESSABLE ENTITY: missing data")})
     @RequestMapping(value = "/user",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<User> usersPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody UserBody body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<User> usersPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody UserBody body);
 
 
-    @Operation(summary = "Update user", description = "Update user data", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "OK: User modified", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
-        
-        @ApiResponse(responseCode = "422", description = "UNPROCESSABLE ENTITY: missing data") })
+    @Operation(summary = "Update user", description = "Update user data", tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: User modified", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+
+            @ApiResponse(responseCode = "422", description = "UNPROCESSABLE ENTITY: missing data")})
     @RequestMapping(value = "/user/{userId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    ResponseEntity<User> usersPut(@Pattern(regexp="^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required=true, schema=@Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "User data", required=true, schema=@Schema()) @Valid @RequestBody Object body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.PUT)
+    ResponseEntity<User> usersPut(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "User data", required = true, schema = @Schema()) @Valid @RequestBody UserBody body);
 
 }
 
