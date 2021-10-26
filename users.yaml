@@ -1,0 +1,160 @@
+openapi: "3.0.3"
+info:
+  title: "Users REST API"
+  version: "1.0.0"
+  description: "REST API for user management"
+  contact:
+    name: Miguel Benito Martin
+    url: 'https://github.com/migue9b/api_spring'
+servers:
+  - url: 'http://127.0.1:8080'
+    description: Local Server
+paths:
+  /user:
+    get:
+      summary: Get all the users
+      operationId: users_get
+      responses:
+        200:
+          description: Users array
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    description: users array
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        404:
+          $ref: '#/components/responses/Response_404'
+    post:
+      summary: Crete a new user
+      operationId: users_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - birthdate
+              properties:
+                name:
+                  description: Name of the user
+                  type: string
+                  format: string
+                birthdate:
+                  description: birthdate of the user
+                  type: string
+                  format: string
+              example:
+                name: "Miguel"
+                birthdate: "26/02/1999"
+      responses:
+        201:
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        422:
+          $ref: '#/components/responses/Response_422'
+
+  /user/{userId}:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    get:
+      summary: Find user by ID
+      description: Get user especified in userId
+      operationId: users_getId
+      responses:
+        200:
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          $ref: '#/components/responses/Response_404'
+    put:
+      summary: Update user
+      description: Update user data
+      operationId: users_put
+      requestBody:
+        $ref: '#/components/requestBodies/userRB'
+      responses:
+        200:
+          description: 'OK: User modified'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        422:
+          $ref: '#/components/responses/Response_422'
+    delete:
+      summary: Delete a user
+      description: Delete a user identified by userId
+      operationId: users_delete
+      responses:
+        204:
+          description: User deleted
+        404:
+          $ref: '#/components/responses/Response_404'
+
+  
+
+components:
+  parameters:
+    userId:
+      name: userId
+      in: path
+      description: ID of User
+      required: true
+      schema:
+        type: integer
+        pattern: ^\d+$
+  schemas:
+    User:
+      type: object
+      description: User description
+      properties:
+        userId:
+          description: User identifier
+          readOnly: true
+          type: integer
+          format: int32
+        name:
+          description: user name
+          type: string
+        birthdate:
+          description: birthdate of the user
+          type: string
+  responses:
+    Response_404:
+      description: 'NOT FOUND: resource not available'
+    Response_422:
+      description: 'UNPROCESSABLE ENTITY: missing data'
+  requestBodies:
+    userRB:
+      description: 'User data'
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - name
+              - birthdate
+            properties:
+              name:
+                description: Name of user
+                type: string
+              birthdate:
+                description: Birthdate of the user
+                type: string
+            example:
+              name: Miguel Benito
+              birthdate: 26/02/1999
