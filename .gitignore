@@ -1,7 +1,9 @@
 # Compiled class file
 *.class
 .idea
-
+.swagger-codegen-ignore
+.swagger-codegen
+target
 # Log file
 *.log
 

@@ -1,2 +1,4 @@
-# api_spring
-REST API implemented in Spring
+# Users REST API
+
+
+## Users API in Spring
