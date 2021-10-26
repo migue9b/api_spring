@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  users_api:
+    image: migue9b/users-api
+    ports:
+      - "8080:8080"

@@ -4,6 +4,7 @@
 .swagger-codegen-ignore
 .swagger-codegen
 target
+/src/main/java/META-INF/MANIFEST.MF
 # Log file
 *.log
 
