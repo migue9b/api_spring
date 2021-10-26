@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.data.annotation.Id;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -15,12 +16,13 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "User description")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-10-26T22:28:39.473155700+02:00[Europe/Madrid]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-10-27T00:45:23.376927900+02:00[Europe/Madrid]")
 
 
 public class User {
     @JsonProperty("userId")
-    private Integer userId = null;
+    @Id
+    private String userId = null;
 
     @JsonProperty("name")
     private String name = null;
@@ -28,7 +30,7 @@ public class User {
     @JsonProperty("birthdate")
     private String birthdate = null;
 
-    public User userId(Integer userId) {
+    public User userId(String userId) {
         this.userId = userId;
         return this;
     }
@@ -40,11 +42,11 @@ public class User {
      **/
     @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "User identifier")
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

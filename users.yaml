@@ -120,8 +120,8 @@ components:
       description: ID of the User
       required: true
       schema:
-        type: integer
-        pattern: ^\d+$
+        type: string
+        pattern: ^\w+$
   schemas:
     User:
       type: object
@@ -130,8 +130,7 @@ components:
         userId:
           description: User identifier
           readOnly: true
-          type: integer
-          format: int32
+          type: string
         name:
           description: user name
           type: string

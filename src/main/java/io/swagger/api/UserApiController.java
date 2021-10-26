@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-10-26T22:28:39.473155700+02:00[Europe/Madrid]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-10-27T00:45:23.376927900+02:00[Europe/Madrid]")
 @RestController
 public class UserApiController implements UserApi {
 
@@ -48,7 +48,7 @@ public class UserApiController implements UserApi {
     private final HttpServletRequest request;
 
     @Autowired
-    private UserBD userDB;
+    private UserDB userDB;
 
     @org.springframework.beans.factory.annotation.Autowired
     public UserApiController(ObjectMapper objectMapper, HttpServletRequest request) {
@@ -56,7 +56,7 @@ public class UserApiController implements UserApi {
         this.request = request;
     }
 
-    public ResponseEntity<Void> usersDelete(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required = true, schema = @Schema()) @PathVariable("userId") Integer userId) {
+    public ResponseEntity<Void> usersDelete(@Pattern(regexp = "^\\w+$") @Parameter(in = ParameterIn.PATH, description = "ID of the User", required = true, schema = @Schema()) @PathVariable("userId") String userId) {
         String accept = request.getHeader("Accept");
         if (!userDB.findById(userId).isPresent())
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
@@ -74,11 +74,11 @@ public class UserApiController implements UserApi {
                 return new ResponseEntity<ArrayList<User>>(HttpStatus.NOT_FOUND);
             else
                 return new ResponseEntity<ArrayList<User>>(users, HttpStatus.OK);
-        }
-        return new ResponseEntity<ArrayList<User>>(HttpStatus.NOT_IMPLEMENTED);
+        } else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<User> usersGetId(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required = true, schema = @Schema()) @PathVariable("userId") Integer userId) {
+    public ResponseEntity<User> usersGetId(@Pattern(regexp = "^\\w+$") @Parameter(in = ParameterIn.PATH, description = "ID of the User", required = true, schema = @Schema()) @PathVariable("userId") String userId) {
         String accept = request.getHeader("Accept");
         if (accept != null) {
             Optional<User> user = userDB.findById(userId);
@@ -86,28 +86,35 @@ public class UserApiController implements UserApi {
                 return new ResponseEntity<User>(user.get(), HttpStatus.OK);
             else
                 return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
+        } else
+            return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<User> usersPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody UserBody body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            User newUser = new User();
-            newUser.setName(body.getName());
-            newUser.setBirthdate(body.getBirthdate());
-            userDB.save(newUser);
-            return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
+            if (!checkIdPost(body)) {
+                User newUser = new User();
+                newUser.setUserId(body.getUserId());
+                newUser.setName(body.getName());
+                newUser.setBirthdate(body.getBirthdate());
+                userDB.save(newUser);
+                return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
+            } else return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
     }
 
+    public boolean checkIdPost(UserBody u) {
+        return userDB.existsById(u.getUserId());
+    }
 
-    public ResponseEntity<User> usersPut(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "User data", required = true, schema = @Schema()) @Valid @RequestBody UserBody body) {
+    public ResponseEntity<User> usersPut(@Pattern(regexp = "^\\w+$") @Parameter(in = ParameterIn.PATH, description = "ID of the User", required = true, schema = @Schema()) @PathVariable("userId") String userId, @Parameter(in = ParameterIn.DEFAULT, description = "User data", required = true, schema = @Schema()) @Valid @RequestBody UserBody body) {
         String accept = request.getHeader("Accept");
         Optional<User> user = userDB.findById(userId);
         if (user.isPresent() && accept.contains("application/json")) {
             User u = user.get();
+            u.setUserId(body.getUserId());
             u.setName(body.getName());
             u.setBirthdate(body.getBirthdate());
             userDB.save(u);
@@ -115,6 +122,6 @@ public class UserApiController implements UserApi {
         } else {
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
-
     }
+
 }

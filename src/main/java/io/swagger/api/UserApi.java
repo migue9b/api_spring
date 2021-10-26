@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-10-26T22:28:39.473155700+02:00[Europe/Madrid]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-10-27T00:45:23.376927900+02:00[Europe/Madrid]")
 @Validated
 public interface UserApi {
 
@@ -46,7 +46,7 @@ public interface UserApi {
             @ApiResponse(responseCode = "404", description = "NOT FOUND: resource not available")})
     @RequestMapping(value = "/user/{userId}",
             method = RequestMethod.DELETE)
-    ResponseEntity<Void> usersDelete(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required = true, schema = @Schema()) @PathVariable("userId") Integer userId);
+    ResponseEntity<Void> usersDelete(@Pattern(regexp = "^\\w+$") @Parameter(in = ParameterIn.PATH, description = "ID of the User", required = true, schema = @Schema()) @PathVariable("userId") String userId);
 
 
     @Operation(summary = "Get all the users", description = "", tags = {})
@@ -68,7 +68,7 @@ public interface UserApi {
     @RequestMapping(value = "/user/{userId}",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<User> usersGetId(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required = true, schema = @Schema()) @PathVariable("userId") Integer userId);
+    ResponseEntity<User> usersGetId(@Pattern(regexp = "^\\w+$") @Parameter(in = ParameterIn.PATH, description = "ID of the User", required = true, schema = @Schema()) @PathVariable("userId") String userId);
 
 
     @Operation(summary = "Crete a new user", description = "", tags = {})
@@ -92,7 +92,7 @@ public interface UserApi {
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.PUT)
-    ResponseEntity<User> usersPut(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID of User", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "User data", required = true, schema = @Schema()) @Valid @RequestBody UserBody body);
+    ResponseEntity<User> usersPut(@Pattern(regexp = "^\\w+$") @Parameter(in = ParameterIn.PATH, description = "ID of the User", required = true, schema = @Schema()) @PathVariable("userId") String userId, @Parameter(in = ParameterIn.DEFAULT, description = "User data", required = true, schema = @Schema()) @Valid @RequestBody UserBody body);
 
 }
 
