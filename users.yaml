@@ -39,9 +39,14 @@ paths:
             schema:
               type: object
               required:
+                - userId
                 - name
                 - birthdate
               properties:
+                userId:
+                  description: Id of the User
+                  type: string
+                  format: string
                 name:
                   description: Name of the user
                   type: string
@@ -51,6 +56,7 @@ paths:
                   type: string
                   format: string
               example:
+                userId: "0123456"
                 name: "Miguel"
                 birthdate: "26/02/1999"
       responses:
@@ -111,7 +117,7 @@ components:
     userId:
       name: userId
       in: path
-      description: ID of User
+      description: ID of the User
       required: true
       schema:
         type: integer
@@ -146,9 +152,13 @@ components:
           schema:
             type: object
             required:
+              - userId
               - name
               - birthdate
             properties:
+              userId:
+                description: Id of the user
+                type: string
               name:
                 description: Name of user
                 type: string
@@ -156,5 +166,6 @@ components:
                 description: Birthdate of the user
                 type: string
             example:
+              userId: 0123456
               name: Miguel Benito
               birthdate: 26/02/1999
